@@ -3,10 +3,23 @@
 \mysubsection{Linda Schey, Sarah Häfele}{SWIG}
 
 Warum SWIG?\\
-verwendete software (python, swig, fusee.math)
+verwendete software (python, swig, fusee.math)\\\\
+
+SWIG ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was durch die SWIG Dokumentation vielleicht nicht gleich ersichtlich ist und erst durch Trial-and-Error langsam erarbeitet werden kann (hier spielen zudem noch das Zusammentreffen von Blender und Fusee mit all ihrer Eigenheiten eine wichtige Rolle, wie später noch besser ersichtlich wird). Deshalb zunächst eine Liste mit Dingen, auf die beim Entwickeln mit SWIG zu beachten ist und auf deren Inhalt zum Teil später noch näher eingegangen wird.
+
+\begin{itemize}
+\item Den Build der Solution sowie deren Unterprojekte auf Release stellen: Da Blender Python \textcolor{red}{als Kommunikationssprache verwendet und Python ...} muss das Projekt als Release gebaut werden, da sonst \textcolor{red}{?????????} Näheres zu den Buildeinstellungen in \textcolor{red}{...}
+\item Die richtige Build-Reihenfolge ist unbedingt zu beachten. Zudem sollten zuvor \emph{geswiggte} Klassen aus dem Ordner gelöscht werden, wenn an ihnen Änderungen vorgenommen wurden, um Fehler durch alte Dateien zu vermeiden. Auf die Reihenfolge soll später näher eingegangen werden (siehe \textcolor{red}{???}).
+\item \textcolor{red}{BigObj: wieso, weshalb, warum}
+\item Größe des Headerfiles: Aus Sichtweise der SWIG-Entwickler sind einzelne Headerfiles pro Klassen besser zu swiggen als ein großes mit allen gesammelten Klassen. Das Swiggen dauert mit einem großen File dementsprechend lang zum Bauen und tritt ein Fehler auf, muss der ganze Prozess wiederholt werden. Fehler beim Swiggen werden so erst am Ende erkannt. Zudem vermuten das Swig-Team dieses Projektes, dass weitere Komplikationen durch das zu großes File aufgetreten sind. 
+\item Die Unterschiede zwischen c++ und c\# müssen verstanden und beachtet werden, da SWIG nicht alle Klassen, Methoden, etc. einfach in die andere Sprache übersetzen kann. Hierzu zählen sicherlich Speicher Allokation, Garbage Collector, Default-Werte, Aufruf und vor allem Pointer. Letztere werden in \textcolor{red}{???} eingehend behandelt. \item Debuggen mit SWIG: Da es kein Syntax-Highlighting für SWIG in Visual Studio gibt, ist das Finden von Fehlern im SWIG-Code nicht leicht.  
+\end{itemize}
+
+
 Aufbau des Projektes in VS\\
-Build Einstellungen (Comandline für swig, dependencies)
-Bigobject (C++->Command Line "`/bigobj"' )
+Build Einstellungen (Comandline für swig, dependencies)\\
+	Bigobject (C++->Command Line "`/bigobj"' )
+	Release evtl.
 
 Das Interface:\\
 	Was sind Typemaps und wie funktionieren sie?\\
@@ -16,7 +29,7 @@ Das Interface:\\
 		- std::vector, std::map\\
 		
 	Probleme\\
-	Das header file groß lange Buildzeiten\\
+	(Das header file groß lange Buildzeiten)\\
 	Ignore Genereated
-	Header file extrem groß  mit vileen classen. beser um zu swiggen wären (laut swig doku) einzelne header files pro klasse
+	(Header file extrem groß  mit vileen classen. beser um zu swiggen wären (laut swig doku) einzelne header files pro klasse)
 ....

@@ -32,17 +32,34 @@ Das Interface:\\
 	Probleme\\
 	(Das header file groß lange Buildzeiten)\\
 	Ignore Genereated\\
-	(Header file extrem groß  mit vileen classen. beser um zu swiggen wären (laut swig doku) einzelne header files pro klasse)
+	(Header file extrem groß  mit vileen classen. beser um zu swigen wären (laut swig doku) einzelne header files pro klasse)
 
-\subsubsection{Aufbau des Projektes in VS}\label{subsubsec:Aufbau}
+\mysubsubsection{Linda}{Aufbau des Projektes in VS}\label{subsubsec:Aufbau}
 
+Um das von Fabi erzeugte \CC~Headerfile nach \CS~zu wrappen wurde eine Solution aufgesetzt die aus fünf Projekten Besteht und den \CC~Code nach \CS~wrappt. Im folgenden werden diese Projekte in der Reihenfolge wie sieh für eine erfolgreiche Generierung des \CS~Codes gebaut werden müssen erläutert.\\
+
+
+\begin{description}
+\item[CppApi]\hfill \\
+Enthält das \CC~Headerfile mit allen Klassen und Funktionen. Generiert \emph{CppApi.dll}
+\item[SWIG]\hfill \\
+Generiert der \emph{CppApi.dll} die entsprechenden Klassen in \CS. Diese werden dem \emph{CsWrapper} Projekt hinzugefügt.
+\item[CppWrapper]\hfill \\
+Generiert eine \CC~ Generiert CppWrapper.dll
+\item[CsWrapper]\hfill \\
+Generiert CsWrapper.dll die die aus dem SWIG Projekt generierten \CS~Klassen enthält.
+\item[CsClient\_START\_ME]\hfill \\
+Ist lediglich ein Test Projekt mit dem der geswigte code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin?
+\end{description}
+
+  
 
 \subsubsection{Build-Einstellungen in VS}\label{subsubsec:Build}
 	Bigobject (C++->Command Line "`/bigobj"' )\\
 	Release evtl.
 
 
-\subsubsection{Typemaps}\label{subsubsec:Typemaps}
+\mysubsubsection{Linda}{Typemaps}\label{subsubsec:Typemaps}
 
 Was sind Typemaps und wie funktionieren sie?\\
 

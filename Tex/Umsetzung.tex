@@ -5,7 +5,7 @@
 Warum SWIG?\\
 verwendete software (python, swig, fusee.math)\\\\
 
-SWIG ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was durch die SWIG Dokumentation vielleicht nicht gleich ersichtlich ist und erst durch Trial-and-Error langsam erarbeitet werden kann (hier spielen zudem noch das Zusammentreffen von Blender und Fusee mit all ihrer Eigenheiten eine wichtige Rolle, wie später noch besser ersichtlich wird). Deshalb zunächst eine Liste mit Dingen, auf die beim Entwickeln mit SWIG zu beachten ist und auf deren Inhalt zum Teil später noch näher eingegangen wird.
+SWIG ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was durch die SWIG Dokumentation nicht gleich ersichtlich ist und erst durch Trial-and-Error langsam erarbeitet werden kann (hier spielen zudem noch das Zusammentreffen von Blender und Fusee mit all ihrer Eigenheiten eine wichtige Rolle, wie später noch besser ersichtlich wird). Deshalb zunächst eine Liste mit Dingen, auf die beim Entwickeln mit SWIG zu achten ist und auf deren Inhalt zum Teil später noch näher eingegangen wird.
 
 \begin{itemize}
 \item Den Build der Solution sowie deren Unterprojekte auf Release stellen: Da Blender Python \textcolor{red}{als Kommunikationssprache verwendet und Python ...} muss das Projekt als Release gebaut werden, da sonst \textcolor{red}{?????????} Näheres zu den Buildeinstellungen in \textcolor{red}{...}
@@ -29,12 +29,12 @@ Das Interface:\\
 	
 	
 		
-	Probleme\\
-	(Das header file groß lange Buildzeiten)\\
-	Ignore Genereated\\
-	(Header file extrem groß  mit vileen classen. beser um zu swigen wären (laut swig doku) einzelne header files pro klasse)
 
-\mysubsubsection{Linda}{Aufbau des Projektes in VS}\label{subsubsec:Aufbau}
+
+	Ignore Genereated\\
+
+
+\subsubsection{Aufbau des Projektes in VS}\label{subsubsec:Aufbau}
 
 Um das von Fabi erzeugte \CC~Headerfile nach \CS~zu wrappen wurde eine Solution aufgesetzt die aus fünf Projekten Besteht und den \CC~Code nach \CS~wrappt. Im folgenden werden diese Projekte in der Reihenfolge wie sieh für eine erfolgreiche Generierung des \CS~Codes gebaut werden müssen erläutert.\\
 
@@ -59,7 +59,7 @@ Ist lediglich ein Test Projekt mit dem der geswigte code in \CS~getestet wird. I
 	Release evtl.
 
 
-\mysubsubsection{Linda}{Typemaps}\label{subsubsec:Typemaps}
+\subsubsection{Typemaps}\label{subsubsec:Typemaps}
 
 Was sind Typemaps und wie funktionieren sie?\\
 
@@ -70,3 +70,7 @@ Besondere Datentypen\\
 		- std::vector, std::map\\
 		
 Zeigertypen können in C\# nur im unsafe-Kontext verwendet werden. Zudem unterliegen sie weiteren Einschränkungen (Boxing und Unboxing wird nicht unterstützt und sie erben nicht von object). Diese und weitere Gründe bewegen dazu, mit SWIG aus den c++-Pointern andere, entsprechende Typen in C\# zu generieren. Dazu müssen die Objekte, die hinter den betreffenden Klassen stehen, analysiert werden. Was repräsentiert der Objekttyp in Blender? Wie ist dieses Konzept in Fusee umgesetzt? \textcolor{red}{Evtl hier noch ein Beispiel mit Fusee Float3 oder so. Danach typemaps dazu}
+
+--> nicht nullbar, wird aber wie Pointer behandelt. Exception-Fehler usw.
+
+\subsubsection{GC}\label{subsubsec:GC}

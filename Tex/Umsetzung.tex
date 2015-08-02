@@ -12,24 +12,44 @@ SWIG ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was
 \item Die richtige Build-Reihenfolge ist unbedingt zu beachten. Zudem sollten zuvor \emph{geswiggte} Klassen aus dem Ordner gelöscht werden, wenn an ihnen Änderungen vorgenommen wurden, um Fehler durch alte Dateien zu vermeiden. Auf die Reihenfolge soll später näher eingegangen werden (siehe \textcolor{red}{???}).
 \item \textcolor{red}{BigObj: wieso, weshalb, warum}
 \item Größe des Headerfiles: Aus Sichtweise der SWIG-Entwickler sind einzelne Headerfiles pro Klassen besser zu swiggen als ein großes mit allen gesammelten Klassen. Das Swiggen dauert mit einem großen File dementsprechend lang zum Bauen und tritt ein Fehler auf, muss der ganze Prozess wiederholt werden. Fehler beim Swiggen werden so erst am Ende erkannt. Zudem vermuten das Swig-Team dieses Projektes, dass weitere Komplikationen durch das zu großes File aufgetreten sind. 
-\item Die Unterschiede zwischen c++ und c\# müssen verstanden und beachtet werden, da SWIG nicht alle Klassen, Methoden, etc. einfach in die andere Sprache übersetzen kann. Hierzu zählen sicherlich Speicher Allokation, Garbage Collector, Default-Werte, Aufruf und vor allem Pointer. Letztere werden in \textcolor{red}{???} eingehend behandelt. \item Debuggen mit SWIG: Da es kein Syntax-Highlighting für SWIG in Visual Studio gibt, ist das Finden von Fehlern im SWIG-Code nicht leicht.  
+\item Die Unterschiede zwischen c++ und c\# müssen verstanden und beachtet werden, da SWIG nicht alle Klassen, Methoden, etc. einfach in die andere Sprache übersetzen kann. Hierzu zählen sicherlich 
+	\begin{itemize}
+	\item Speicher Allokation
+	\item Garbage Collector: Durh den Managed Code in C\# können eventuell Probleme auftreten. Im unmanaged C++-Code sind keine Vorbereitungen für einen eventuellen Garbage Collector getroffen. Wird dieser Code mit SWIG nach C\# übersetzt, kann es Probleme bei Dependencies geben, dann nämlich, wenn der Garbage Collector ein Objekt entfernt, auf das ein anderes zugreifen möchte. Hier kann es zu Programmabstürzen kommen. \textcolor{red}{? Lösungsvorschläge weiter unten}
+	\item Default Werte: C++ und C\# gehen unterschiedlich mit Default-Werten um, wenn eine Variable nicht initialisiert wurde. C++ vergibt einen völlig beliebigen Wert, während C\# meist feste Default-Werte hat. Dies ist wiederum bei der Übersetzung mit SWIG zu beachten. 
+	\item Pointer: Da die Anwendung C++- in C\#-Code umwandeln soll, treten hier verhäuft Fehler und Komplikationen auf. In Unterkapitel \ref{subsubsec:Datentypen} soll dies eingehend behandelt werden. 
+	\end{itemize}
+\item Die Spezialfälle werden in der SWIG-Doku nicht ausreichend behandelt, weswegen die Entwickler durch so genannte \emph{Mailing Lists} kontaktiert wurden. Der Dialog mit den Spezialisten bringt neue Erkenntnisse, kann aber nicht alle Spezialfälle klären. Hierzu später ebenfalls mehr.
+\item Syntax: Syntaxunterschiede können ebenfalls Komplikationen hervorrufen. Da SWIG hauptsächlich Strings ersetzt, muss die Struktur der jeweiligen Syntax immer beachtet werden. So muss zum Beispiel in c++ der Zeigerstern (*) direkt vor dem Variablennamen stehen, wobei in C\# dieser zur Typendeklaration gehört. \textcolor{red}{???}
+\item Debuggen mit SWIG: Da es kein Syntax-Highlighting für SWIG in Visual Studio gibt, ist das Finden von Fehlern im SWIG-Code nicht leicht.  
 \end{itemize}
 
 
-Aufbau des Projektes in VS\\
-Build Einstellungen (Comandline für swig, dependencies)\\
-	Bigobject (C++->Command Line "`/bigobj"' )
+Das Interface:\\
+	
+	
+		
+	Probleme\\
+	(Das header file groß lange Buildzeiten)\\
+	Ignore Genereated\\
+	(Header file extrem groß  mit vileen classen. beser um zu swiggen wären (laut swig doku) einzelne header files pro klasse)
+
+\subsubsection{Aufbau des Projektes in VS}\label{subsubsec:Aufbau}
+
+
+\subsubsection{Build-Einstellungen in VS}\label{subsubsec:Build}
+	Bigobject (C++->Command Line "`/bigobj"' )\\
 	Release evtl.
 
-Das Interface:\\
-	Was sind Typemaps und wie funktionieren sie?\\
-	Besondere Datentypen\\
+
+\subsubsection{Typemaps}\label{subsubsec:Typemaps}
+
+Was sind Typemaps und wie funktionieren sie?\\
+
+\subsubsection{Besondere Datentypen}\label{subsubsec:Datentypen}
+Besondere Datentypen\\
 		- std::array\\
 		- FVector3, FVECTOR4, ...\\
 		- std::vector, std::map\\
 		
-	Probleme\\
-	(Das header file groß lange Buildzeiten)\\
-	Ignore Genereated
-	(Header file extrem groß  mit vileen classen. beser um zu swiggen wären (laut swig doku) einzelne header files pro klasse)
-....
+Zeigertypen können in C\# nur im unsafe-Kontext verwendet werden. Zudem unterliegen sie weiteren Einschränkungen (Boxing und Unboxing wird nicht unterstützt und sie erben nicht von object). Diese und weitere Gründe bewegen dazu, mit SWIG aus den c++-Pointern andere, entsprechende Typen in C\# zu generieren. Dazu müssen die Objekte, die hinter den betreffenden Klassen stehen, analysiert werden. Was repräsentiert der Objekttyp in Blender? Wie ist dieses Konzept in Fusee umgesetzt? \textcolor{red}{Evtl hier noch ein Beispiel mit Fusee Float3 oder so. Danach typemaps dazu}

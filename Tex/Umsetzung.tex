@@ -3,9 +3,8 @@
 \mysubsection{Linda Schey, Sarah Häfele}{SWIG}
 
 Swig ist ein Programmierwerkzeug, dass es ermöglicht in C/\CC~ geschriebenen Programmcode durch höhere Programmiersprachen anzusprechen. Neben einer Vielzahl von Programmier- und Skriptsprachen unterstützt Swig auch \CS~ und eignet sich somit um in\CC~geschrieben Programmcode mit Fusee zu verbinden. Swig wurde gewählt, das es zum einen bereits in dem Cinemea4D-Uniplug von Fusee verwendet wurde und zum anderem nimmt es einem die Arbeit ab einen kompletten Wrapper von Hand zu schreiben, so dass man sich mittels Swig einen Wrapper generieren lassen kann. Zudem erleichtert es die Wartung von Projekten, da Updates im Code nicht von Hand und mühseliger Suche eingetragen werden müssen, sondern lediglich für die neue Generierung des Wrappers die aktuelle Headerfiles eingebunden werden müssen.
+Um den Wrapper zu generieren wurden zusätzlich die Python Library eingebunden, da das Headerfile teilweise Klasse aus Python verwendet.  Außerdem wurde die Fusee.Math Library referenziert, da einge Dateypen auf Fussee datentyopen gemapt wrerden sollen.
 
-Warum SWIG?\\
-verwendete software (python, swig, fusee.math)\\\\
 
 SWIG ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was durch die SWIG Dokumentation nicht gleich ersichtlich ist und erst durch Trial-and-Error langsam erarbeitet werden kann (hier spielen zudem noch das Zusammentreffen von Blender und Fusee mit all ihrer Eigenheiten eine wichtige Rolle, wie später noch besser ersichtlich wird). Deshalb zunächst eine Liste mit Dingen, auf die beim Entwickeln mit SWIG zu achten ist und auf deren Inhalt zum Teil später noch näher eingegangen wird.
 
@@ -66,9 +65,16 @@ Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. 
 Was sind Typemaps und wie funktionieren sie?\\
 
 \subsubsection{Besondere Datentypen}\label{subsubsec:Datentypen}
-Besondere Datentypen\\
-		- std::array\\
-		- FVector3, FVECTOR4, ...\\
+
+Besondere Datentypen sind jene, die nicht zu den Standard Datentypen in \CS~gewrappt werden, oder gar keine Standarddatentypen sind. Hier sind das spezielle Typen zu Darstellung von Vektoren oder Matrizen im 3-dimensionalen Raum. Dafür wurden verschiedene Datentypen ausprobiert. Zu Beginn wurde begonnen einen 3-dimensionalen Vektor als Feld mit drei Elementen darzustellen. Dafür wurde im Swig-Interface CppApi.i ein extra Typemap angelegt, das diese dreielementige Feld in den Fusse Datyntyp float3 mapt. Da hier aber Probleme auftraten, da Felder in \CC~nicht als Rückgabe wert einer Funktion zulässig sind, sondern nur als Pointer, \CS~aber keine Pointer unterstützt, wurde die der Datentyp bei der Erstellung des Headerfiles in den Datentyp std::array<float, 3> geändert. Auch für diesn Datentyp wurde zunächst ein entsprechendes Typemap erstellt, das teilweise funktionierte. Jedoch wurde bei der Verwendung eines std::array<> als Parameter einer Funktion übergeben dann ein Ecxeption geworfen, da für std::array  NULL bzw. 0 zurückgegeben werden kann, was bei einer Standard-Exceptio in Swig der Fall ist. So wurde wieder der Datentyp geändert, diesmal wurde ein extra Struct definiert, das die Eigenschaften eines \enquote{Plain old Datatype} aufweist, so dass anstatt eines Objektes auch NULL zurück gegeben werden kann. Über die Swig-User-Mailingliste kam letztendlich der Hinwei,d as im Typemap festzulegen ist, das für der Parameter \enquote{out} außerdem festlegen kann, was als \enquote{null} zurückgeben wird, hier ein leeres Objekt des Strucs. Dies Lösung hätte auch für das std::array funktioniert, so das nicht erst ein extra neuer Datentyp eingeführte werden müsste. Es wurde aber beim Struct geblieben, da im Hinblick auf das Ziel ein Uniplug zu erstellen, man so bei der Erstellung des Headefiles, von den unterschiedlichen Modellierungsprogrammen erst die verschiedenen Datentypen die Vektoren oder Matrizen darstellen in einen einheitlich \CC~Typ umwandeln kann, so das hier das Typemap für jedes Modellierungsprogramm das selbe wäre. 
+Datentypen die im aktuellen \emph{CppApi.i} Interface mit Typemaps nach \CS~und dem entsprechenden Typ in Fusee gemapt werden sind:\\
+\begin{itemize}
+	\item FVector2 nach Fusee.Math.float2
+	\item FVector3 nach Fusee.Math.float3
+	\item FVector4 nach Fusee.Math.float4
+	\item VFLOAT16 nach Fusee.Math.float4x4
+\end{itemize}
+
 		- std::vector, std::map\\
 	
 
@@ -77,7 +83,7 @@ Zeigertypen können in C\# nur im unsafe-Kontext verwendet werden. Zudem unterli
 --> nicht nullbar, wird aber wie Pointer behandelt. Exception-Fehler usw.
 
 \subsubsection{Das SWIG Interface File}\label{subsubsec:Swiginterface}
-Das SWIG Interace File CppApi.i enthält neben den oben genannten Typmaps noch weiter  Uübersetzungsvorgaben.
+Das SWIG Interace File CppApi.i enthält neben den oben genannte Typmaps noch weitere .
 string
 map(mit problemen)\&vector
 ignore-Regex

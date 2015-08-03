@@ -2,6 +2,8 @@
 
 \mysubsection{Linda Schey, Sarah Häfele}{SWIG}
 
+Swig ist ein Programmierwerkzeug, dass es ermöglicht in C/\CC~ geschriebenen Programmcode durch höhere Programmiersprachen anzusprechen. Neben einer Vielzahl von Programmier- und Skriptsprachen unterstützt Swig auch \CS~ und eignet sich somit um in\CC~geschrieben Programmcode mit Fusee zu verbinden.
+
 Warum SWIG?\\
 verwendete software (python, swig, fusee.math)\\\\
 
@@ -43,13 +45,13 @@ Um das von Fabi erzeugte \CC~Headerfile nach \CS~zu wrappen wurde eine Solution 
 \item[CppApi]\hfill \\
 Enthält das \CC~Headerfile mit allen Klassen und Funktionen. Generiert \emph{CppApi.dll}
 \item[SWIG]\hfill \\
-Generiert der \emph{CppApi.dll} die entsprechenden Klassen in \CS. Diese werden dem \emph{CsWrapper} Projekt hinzugefügt.
+Enthält das Swig-Interface \emph{CppApi.i} nach dessen Vorschriften besondere Datentypen geswiggt werden (mehr dazu in \ref{subsubsec:Typemaps}). Generiert anhand des Headerfiles entsprechenden Wrapper in \CS. Diese werden dem \emph{CsWrapper} Projekt hinzugefügt.
 \item[CppWrapper]\hfill \\
-Generiert eine \CC~ Generiert CppWrapper.dll
+Enthält das \CC~ File CppApiWrapper.cpp, das ebenfalls durch Swig Generiert wird. Es stellt die Schnittsichtelle zwischen dem \CC~ Code und dem \CS~ Code dar unter Berücksichtigung der durch Swig gemarschallten Typen und deren Umwandlungen. Des weiteren wird die \emph{CppWrapper.dll} generiert. 
 \item[CsWrapper]\hfill \\
-Generiert CsWrapper.dll die die aus dem SWIG Projekt generierten \CS~Klassen enthält.
+Generiert CsWrapper.dll die die aus dem SWIG Projekt generierten \CS~Klassen enthält. 
 \item[CsClient\_START\_ME]\hfill \\
-Ist lediglich ein Test Projekt mit dem der geswigte code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin?
+Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin?
 \end{description}
 
   
@@ -68,9 +70,14 @@ Besondere Datentypen\\
 		- std::array\\
 		- FVector3, FVECTOR4, ...\\
 		- std::vector, std::map\\
-		
+	
+
 Zeigertypen können in C\# nur im unsafe-Kontext verwendet werden. Zudem unterliegen sie weiteren Einschränkungen (Boxing und Unboxing wird nicht unterstützt und sie erben nicht von object). Diese und weitere Gründe bewegen dazu, mit SWIG aus den c++-Pointern andere, entsprechende Typen in C\# zu generieren. Dazu müssen die Objekte, die hinter den betreffenden Klassen stehen, analysiert werden. Was repräsentiert der Objekttyp in Blender? Wie ist dieses Konzept in Fusee umgesetzt? \textcolor{red}{Evtl hier noch ein Beispiel mit Fusee Float3 oder so. Danach typemaps dazu}
 
 --> nicht nullbar, wird aber wie Pointer behandelt. Exception-Fehler usw.
+
+\subsubsection{Das SWIG Interface File}\label{subsubsec:Swiginterface}
+Das SWIG Interace File CppApi.i enthält neben den obne genannten Typmaps nochch weiter 
+
 
 \subsubsection{GC}\label{subsubsec:GC}

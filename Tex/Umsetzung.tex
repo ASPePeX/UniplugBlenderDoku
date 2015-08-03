@@ -2,7 +2,7 @@
 
 \mysubsection{Linda Schey, Sarah Häfele}{SWIG}
 
-Swig ist ein Programmierwerkzeug, dass es ermöglicht in C/\CC~ geschriebenen Programmcode durch höhere Programmiersprachen anzusprechen. Neben einer Vielzahl von Programmier- und Skriptsprachen unterstützt Swig auch \CS~ und eignet sich somit um in\CC~geschrieben Programmcode mit Fusee zu verbinden.
+Swig ist ein Programmierwerkzeug, dass es ermöglicht in C/\CC~ geschriebenen Programmcode durch höhere Programmiersprachen anzusprechen. Neben einer Vielzahl von Programmier- und Skriptsprachen unterstützt Swig auch \CS~ und eignet sich somit um in\CC~geschrieben Programmcode mit Fusee zu verbinden. Swig wurde gewählt, das es zum einen bereits in dem Cinemea4D-Uniplug von Fusee verwendet wurde und zum anderem nimmt es einem die Arbeit ab einen kompletten Wrapper von Hand zu schreiben, so dass man sich mittels Swig einen Wrapper generieren lassen kann. Zudem erleichtert es die Wartung von Projekten, da Updates im Code nicht von Hand und mühseliger Suche eingetragen werden müssen, sondern lediglich für die neue Generierung des Wrappers die aktuelle Headerfiles eingebunden werden müssen.
 
 Warum SWIG?\\
 verwendete software (python, swig, fusee.math)\\\\
@@ -27,7 +27,7 @@ SWIG ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was
 \end{itemize}
 
 
-Das Interface:\\
+
 	
 	
 		
@@ -77,7 +77,10 @@ Zeigertypen können in C\# nur im unsafe-Kontext verwendet werden. Zudem unterli
 --> nicht nullbar, wird aber wie Pointer behandelt. Exception-Fehler usw.
 
 \subsubsection{Das SWIG Interface File}\label{subsubsec:Swiginterface}
-Das SWIG Interace File CppApi.i enthält neben den obne genannten Typmaps nochch weiter 
+Das SWIG Interace File CppApi.i enthält neben den oben genannten Typmaps noch weiter  Uübersetzungsvorgaben.
+string
+map(mit problemen)\&vector
+ignore-Regex
 
 
 \subsubsection{GC}\label{subsubsec:GC}

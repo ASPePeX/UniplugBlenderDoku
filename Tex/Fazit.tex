@@ -1,6 +1,12 @@
 \mysection{}{Fazit und Ausblick}
 
-Technische Umsetzung wahrscheinlich möglich allerdings sehr hoher Aufwand bei Wartung und Anbindung neuer Software.
-Logische Umsetzung sehr Komplex, je höher die Betrachtungsweite an Software ist.
+Trotz dem, dass es der Forschungsgruppe bisher nicht gelungen ist eine Kommunikation zwischen Blender und \CS zu schaffen schätzt die Forschungsgruppe die technischen Gegebenheite so ein das es auf dem gezeigten Weg prinzipiell trotzdem möglich ist. Allerdings hat sich die Einschätzung der in den \nameref{sec:Vorueberlegungen} getroffenen Entscheidungen sehr stark verändert.
 
-Andere Herrangehensweise wählen ... Zwischenlayer nativ für die Software zugeschnitten, dann Übersetzung nach \CS und Anbindung zu Fusee.
+Der Implementierung- und Wartungsaufwand für mehrere 3D-Softwareprodukte ist sehr viel höher als erwartet, was in den zuvor dargelegten Problemen mit SWIG (s. \todo{SWIG-Referent}) begründet liegt. SWIG ist (noch?) nicht dazu geeignet eine Übersetzung für \todo{X-Dröfzigzausendstel} Interfaces durchzuführen.
+
+Die Forschungsgruppe empfiehlt für weitergehende Versuche der Entwicklung eines Uniplugs, die zu übersetzenden Funktionen zu evaluierten und nativ für die jeweilige 3D-Software eine Plugin als Zwischenschicht für die Übersetzung zu entwickeln.
+
+%Technische Umsetzung wahrscheinlich möglich allerdings sehr hoher Aufwand bei Wartung und Anbindung neuer Software.
+%Logische Umsetzung sehr Komplex, je höher die Betrachtungsweite an Software ist.
+
+%Andere Herrangehensweise wählen ... Zwischenlayer nativ für die Software zugeschnitten, dann Übersetzung nach \CS und Anbindung zu Fusee.

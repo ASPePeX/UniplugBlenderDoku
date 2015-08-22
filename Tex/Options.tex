@@ -25,9 +25,11 @@
 
 \usepackage{graphicx}
 \usepackage{listings}
+\usepackage{scrhack}				% Better source code compatibility
 \usepackage{color}
 \usepackage{hyperref}
 \usepackage{pdfpages}
+\usepackage{caption}
 
 \usepackage{relsize}
 \usepackage{subfigure}
@@ -39,8 +41,8 @@
 \newcommand\mysubsection[2]{\subsection{#2}\vspace{-0.5em}\hspace{3.2em}\emph{#1}\vspace{1.3em}}
 \newcommand\mysubsubsection[2]{\subsubsection{#2}\vspace{-0.5em}\hspace{3.2em}\emph{#1}\vspace{1.3em}}
 % C# und C++
-\newcommand{\CS}{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-2}{\textbf{\#}}}~}
-\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny +}~}
+\newcommand{\CS}{C\nolinebreak[4]\hspace{-.05em}\raisebox{.4ex}{\relsize{-2}{\textbf{\#}}}{}}
+\newcommand{\CC}{C\nolinebreak\hspace{-.05em}\raisebox{.4ex}{\tiny +}\nolinebreak\hspace{-.10em}\raisebox{.4ex}{\tiny +}{}}
 
 % Custom
 \newcommand\todo[1]{\textcolor{red}{\textbf{#1}}}
@@ -54,6 +56,65 @@
 {\normalfont\normalsize\bfseries}{\theparagraph}{1em}{}
 \titlespacing*{\paragraph}
 {0pt}{3.25ex plus 1ex minus .2ex}{1.5ex plus .2ex}
+
+% Listings
+\definecolor{gray}{rgb}{0.3,0.3,0.3}
+
+\lstset{literate=%
+    {Ö}{{\"O}}1
+    {Ä}{{\"A}}1
+    {Ü}{{\"U}}1
+    {ß}{{\ss}}1
+    {ü}{{\"u}}1
+    {ä}{{\"a}}1
+    {ö}{{\"o}}1
+    {~}{{\textasciitilde}}1
+}
+
+\lstset{
+  backgroundcolor=\color{white},	% background color
+  basicstyle=\footnotesize\ttfamily,% code font size
+  breakatwhitespace=false,			% automatic breaklines only at whitspaces?
+  breaklines=true,					% automatic breaklines
+  captionpos=b,						% caption position
+  deletekeywords={},				% delete keywords from language
+  escapeinside={(*@}{@*)},          % LaTeX will be evaluated inside (*@ \code{} @*)
+  extendedchars=true,				% Non-ASCII characters
+  frame=single,						% frame around code
+  keepspaces=true,					% keep spaces (i.e. indentation), might need columns = flexible
+  %columns=flexible,				% set characters in columns or freely?
+  language=C++,				    	% programming language
+  morekeywords={*,},				% add keywords
+  numbers=left,						% line-numbers (none, left, right)
+  numbersep=5pt,					% Distance line numbers <-> code
+  numberstyle=\tiny\color{gray},	% style for line-numbers
+  rulecolor=\color{black},			% frame color
+  showspaces=false,					% show spaces by using special underscores?
+  showstringspaces=false,			% underline spaces within strings only
+  showtabs=false,					% show tabs within strings adding particular underscores
+  stepnumber=1,						% step between drawn line-numbers
+  firstnumber=1,
+  tabsize=4,						% tabs translate to some amount of spaces
+  title=\lstname,					% Show filename
+  keywordstyle=\color[rgb]{0.0,0,0},
+  keywordstyle=[1]\color[rgb]{0,0,0.0},
+  keywordstyle=[2]\color[rgb]{0.0,0.0,0.0},
+  keywordstyle=[3]\color[rgb]{0.0,0.0,0.0},
+  keywordstyle=[4]\color[rgb]{0.0,0.0,0.0},
+  commentstyle=\color[rgb]{0.0,0.0,0.0},
+  stringstyle=\color[rgb]{0.0,0.00,0.00},
+}
+
+\lstnewenvironment{code}[1][]%
+  {\noindent\minipage{\linewidth}\medskip\lstset{#1}}
+  {\endminipage} 
+
+\DeclareCaptionLabelFormat{period}{#1~#2}
+\captionsetup{labelformat=period}
+
+\renewcommand{\lstlistingname}{Listing}
+
+\renewcommand{\sc}[1]{\path{#1}}
 
 % PDF Metadaten
 

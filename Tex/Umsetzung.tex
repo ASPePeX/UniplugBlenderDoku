@@ -51,9 +51,10 @@ Enthält das Swig-Interface \emph{CppApi.i} nach dessen Vorschriften besondere D
 Enthält das \CC~ File CppApiWrapper.cpp, das ebenfalls durch Swig Generiert wird. Es stellt die Schnittsichtelle zwischen dem \CC~ Code und dem \CS~ Code dar unter Berücksichtigung der durch Swig gemarschallten Typen und deren Umwandlungen. Des weiteren wird die \emph{CppWrapper.dll} generiert. 
 \item[CsWrapper]\hfill \\
 Generiert CsWrapper.dll die die aus dem SWIG Projekt generierten \CS~Klassen enthält. 
-\item[CsClient\_START\_ME]\hfill \\
-Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin?
+\item[CsClient]\hfill \\
+Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin? -> Ist jetzt Plugin. Die Init-Funktion wird von \CS aus aufgerufen.
 \item[ManagedBridge]\hfill \\ Brücke zwischen dem \CS-Plugin und dem \CC-Plugin für Blender. Es handelt sich dabei um ein Managed-\CC-Projekt, das das \CS{}-Plugin referenziert, dessen Funktionen aufruft und die entsprechenden Funktionsaufrufe exportiert, sodass diese von \CC aus aufgerufen werden können.
+\item[BlenderPlug]\hfill \\ Das Projekt BlenderPlug ist das eigentliche \CC-Modul, das in Blender als Python-Erweiterungs-Modul geladen werden kann und eine Init-Funktion bereitstellt, um über die ManagedBridge hinweg auf die \CS{}-Funktionalität zuzugreifen. Der relative kurze \CC-Quelltext dieses Programms richtet sich nach den Vorgaben von Python\footnote{\url{https://docs.python.org/3/extending/extending.html}} und muss mittels Python-Compiler kompiliert werden. Ein entsprechendes Script und eine entsprechende Konfigurationsdatei (\emph{setup.py}) werden im Post-Build-Prozess aufgerufen. Die daraus entstehende pyd-Datei (letztlich eine \CC-DLL) wird dann zusammen mit allen anderen Projektdateien in den Unterordner \emph{Fusee} im Addon-Ordner im Blender-Hauptverzeichnis und in das Blender-Hauptverzeichnis selbst kopiert. In Blender kann dann in der Python-Konsole über \emph{from fusee import uniplug} und \emph{uniplug.init()} die Init-Funktion ausgeführt werden. Siehe hierzu auch das angehängte Tutorial zur Erstellung eines eigenen Plugins.
 \end{description}
 
   

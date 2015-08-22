@@ -53,6 +53,7 @@ Enthält das \CC~ File CppApiWrapper.cpp, das ebenfalls durch Swig Generiert wir
 Generiert CsWrapper.dll die die aus dem SWIG Projekt generierten \CS~Klassen enthält. 
 \item[CsClient\_START\_ME]\hfill \\
 Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin?
+\item[ManagedBridge]\hfill \\ Brücke zwischen dem \CS-Plugin und dem \CC-Plugin für Blender. Es handelt sich dabei um ein Managed-\CC-Projekt, das das \CS{}-Plugin referenziert, dessen Funktionen aufruft und die entsprechenden Funktionsaufrufe exportiert, sodass diese von \CC aus aufgerufen werden können.
 \end{description}
 
   

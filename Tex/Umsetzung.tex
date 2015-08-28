@@ -68,12 +68,17 @@ Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. 
 Da in diesem Projekt mit Blender bzw. Fusee Spezifischen Datentypen gearbeitet wird, die weder in der Standard \CC noch in der\CS API gibt mussten diese im Swig-Interface behandelt werden. 
 
 \subparagraph{Arrays}
-Swig mappt Arrays von \CC nach \CS standardmäßig als Pointer, so das auf der\CS Seite dann nicht einfach mit einem klassischen \CS-Array gearbeitet werden kann sondern mit einem \emph{SWIGTYPE\_p\_int} oder \emph{SWIGTYPE\_p\_double}. Mit dem vordefinierten Interface \emph{arrays\_csharp.i} gibt es nur die Möglichkeit Arrays namentlich mit dem Befehl \emph{\%apply} in ein \CS-Array zu mappen. Das ist für ein Projekt dieser Größe aber nicht passend, das es extrem aufwändig ist die Namen aller Array herauszusuchen und in das Interface einzutragen und lässt sich nicht automatisieren.
-To be continued...
+Swig mappt Arrays von \CC nach \CS standardmäßig als Pointer, so das auf der \CS Seite dann nicht einfach mit einem klassischen \CS-Array gearbeitet werden kann sondern mit einem \emph{SWIGTYPE\_p\_int} oder \emph{SWIGTYPE\_p\_double}. Mit dem vordefinierten Interface \emph{arrays\_csharp.i} gibt es nur die Möglichkeit Arrays namentlich mit dem Befehl \emph{\%apply} in ein \CS-Array zu mappen. Das ist für ein Projekt dieser Größe aber nicht passend, das es extrem aufwändig ist die Namen aller Array herauszusuchen und in das Interface einzutragen und lässt sich nicht automatisieren. Deshalb wurde für Integer, Float und Bolean Arrays Angaben zum Typemapping gemacht, sodass, egal welche Größe ein Array hat und unabhängig vom Namen zu einem \CS Array umgewandelt wird und umgekehrt (siehe Listing\ref{lst:Arrays}). 
+
+\begin{code}[caption={Beispiel Arraymapping},label={lst:Arrays}, escapechar=|]
+%typemap(cstype, out="$csclassname") int[ANY] "int[]"
+%typemap(csin) int[ANY] " $csinput"
+%typemap(imtype) int[ANY] "int[]"
+\end{code}
 
 \subparagraph{std::map}
 
-Im Header File treten viele Key-Value Paare Typ std::map<string, int>, std::map<int, string> oder std::map<string, DATA\_TYPE\footnote{Beliebiger Datentyp}> auf. Um dieses Konstrukt in ein Äquivalents in \CS zu konvertieren, wird das \emph{std\_map.i} Interface in das Interface eingebunden werden. Das ermöglicht es diese Key-Value Paare in einen Datentyp zu übersetzen, der die selben Eingenschaften wie ein \CS~ Dictionary. Der Name des Datetypen wir im im Interface definiert und ist dann in \CS unter diesem Damen zu finden. Der so definite Datentyp funktioniert der im Großen und Ganzen wir ein Dictionary (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stringintmap}). Um ein Key-Value Paar, das einen beliebigen Datentyp enthält nach \CS mappen zu können, muss für jeden Datentyp ein extra Template erstellt werden. Um hier zumindest ein wenig Copy-Paste-Arbeit zu sparen wurde per \emph{\%define} ein Template defniert (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdmapdefine}), das einen Datentyp entgegennimmt, der dann mit einem String zu einem Key-Value paar zusammen gefügt wird. Dieses Template muss dann für jeden Datentyp einmal aufgerufen werden (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdtemplate}). 
+Im Header File treten viele Key-Value Paare Typ \emph{std::map<string, int>}, \emph{std::map<int, string>} oder \emph{std::map<string, DATA\_TYPE\footnote{Beliebiger Datentyp}>} auf. Um dieses Konstrukt in ein Äquivalents in \CS zu konvertieren, wird das \emph{std\_map.i} Interface in das Interface eingebunden werden. Das ermöglicht es diese Key-Value Paare in einen Datentyp zu übersetzen, der die selben Eingenschaften wie ein \CS~ Dictionary. Der Name des Datetypen wir im im Interface definiert und ist dann in \CS unter diesem Damen zu finden. Der so definierte Datentyp funktioniert im Großen und Ganzen wie ein Dictionary (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stringintmap}). Um ein Key-Value Paar, das einen beliebigen Datentyp enthält nach \CS mappen zu können, muss für jeden Datentyp ein extra Template erstellt werden. Um hier zumindest ein wenig Copy-Paste-Arbeit zu sparen wurde per \emph{\%define} ein Template defniert (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdmapdefine}), das einen Datentyp entgegennimmt, der dann mit einem String zu einem Key-Value paar zusammen gefügt wird. Dieses Template muss dann für jeden Datentyp einmal aufgerufen werden (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdtemplate}). 
 
 \begin{code}[caption={std::map},label={lst:stdmap}, escapechar=|]
 %include "std_map.i"
@@ -87,14 +92,11 @@ Im Header File treten viele Key-Value Paare Typ std::map<string, int>, std::map<
 %std_templates(Property);|\label{line:stdtemplate}|
 %std_templates(Function);
 %std_templates(EnumPropertyItem);
-%std_templates(Struct);
-%std_templates(PropertyGroup);
-
 \end{code}
 
 \subparagraph{std::vector}
 
-Im Header-File treten drei Fälle des std::vector<T> auf. Diese können mit wenig Aufwand unter Verwendung des \emph{std\_vector.i} Interfaces einfach gemappt werden (siehe \ref{lst:stdvector})
+Im Header-File treten drei Fälle des \emph{std::vector<T>} auf. Diese können mit wenig Aufwand unter Verwendung des \emph{std\_vector.i} Interfaces einfach gemappt werden (siehe Listing \ref{lst:stdvector})
 
 \begin{code}[caption={std::map},label={lst:stdvector}, escapechar=|]
 %include "std_vector.i"
@@ -104,36 +106,34 @@ Im Header-File treten drei Fälle des std::vector<T> auf. Diese können mit weni
 %template(DoubleVector) std::vector<double>;
 \end{code}
 
+\subparagraph{ignore-Regex}
+
 \subparagraph{POD Datentypen}
 
 
-\subsubsection{Typemaps}\label{subsubsec:Typemaps}
+%\subsubsection{Typemaps}\label{subsubsec:Typemaps}
 
-Was sind Typemaps und wie funktionieren sie?\\
+%Was sind Typemaps und wie funktionieren sie?\\
 
-\subsubsection{Besondere Datentypen}\label{subsubsec:Datentypen}
-
-Besondere Datentypen sind jene, die nicht zu den Standard Datentypen in \CS~gewrappt werden, oder gar keine Standarddatentypen sind. Hier sind das spezielle Typen zu Darstellung von Vektoren oder Matrizen im 3-dimensionalen Raum. Dafür wurden verschiedene Datentypen ausprobiert. Zu Beginn wurde begonnen einen 3-dimensionalen Vektor als Feld mit drei Elementen darzustellen. Dafür wurde im Swig-Interface CppApi.i ein extra Typemap angelegt, das diese dreielementige Feld in den Fusse Datyntyp float3 mapt. Da hier aber Probleme auftraten, da Felder in \CC~nicht als Rückgabe wert einer Funktion zulässig sind, sondern nur als Pointer, \CS~aber keine Pointer unterstützt, wurde die der Datentyp bei der Erstellung des Headerfiles in den Datentyp std::array<float, 3> geändert. Auch für diesn Datentyp wurde zunächst ein entsprechendes Typemap erstellt, das teilweise funktionierte. Jedoch wurde bei der Verwendung eines std::array<> als Parameter einer Funktion übergeben dann ein Ecxeption geworfen, da für std::array  NULL bzw. 0 zurückgegeben werden kann, was bei einer Standard-Exceptio in Swig der Fall ist. So wurde wieder der Datentyp geändert, diesmal wurde ein extra Struct definiert, das die Eigenschaften eines \enquote{Plain old Datatype} aufweist, so dass anstatt eines Objektes auch NULL zurück gegeben werden kann. Über die Swig-User-Mailingliste kam letztendlich der Hinwei,d as im Typemap festzulegen ist, das für der Parameter \enquote{out} außerdem festlegen kann, was als \enquote{null} zurückgeben wird, hier ein leeres Objekt des Strucs. Dies Lösung hätte auch für das std::array funktioniert, so das nicht erst ein extra neuer Datentyp eingeführte werden müsste. Es wurde aber beim Struct geblieben, da im Hinblick auf das Ziel ein Uniplug zu erstellen, man so bei der Erstellung des Headefiles, von den unterschiedlichen Modellierungsprogrammen erst die verschiedenen Datentypen die Vektoren oder Matrizen darstellen in einen einheitlich \CC~Typ umwandeln kann, so das hier das Typemap für jedes Modellierungsprogramm das selbe wäre. 
-Datentypen die im aktuellen \emph{CppApi.i} Interface mit Typemaps nach \CS~und dem entsprechenden Typ in Fusee gemapt werden sind:\\
-\begin{itemize}
-	\item FVector2 nach Fusee.Math.float2
-	\item FVector3 nach Fusee.Math.float3
-	\item FVector4 nach Fusee.Math.float4
-	\item VFLOAT16 nach Fusee.Math.float4x4
-\end{itemize}
-
-		- std::vector, std::map\\
+%\subsubsection{Besondere Datentypen}\label{subsubsec:Datentypen}
+%%das hier gehört dann zu POD Datentypen
+%Besondere Datentypen sind jene, die nicht zu den Standard Datentypen in \CS~gewrappt werden, oder gar keine Standarddatentypen sind. Hier sind das spezielle Typen zu Darstellung von Vektoren oder Matrizen im 3-dimensionalen Raum. Dafür wurden verschiedene Datentypen ausprobiert. Zu Beginn wurde begonnen einen 3-dimensionalen Vektor als Feld mit drei Elementen darzustellen. Dafür wurde im Swig-Interface CppApi.i ein extra Typemap angelegt, das diese dreielementige Feld in den Fusse Datyntyp float3 mapt. Da hier aber Probleme auftraten, da Felder in \CC~nicht als Rückgabe wert einer Funktion zulässig sind, sondern nur als Pointer, \CS~aber keine Pointer unterstützt, wurde die der Datentyp bei der Erstellung des Headerfiles in den Datentyp std::array<float, 3> geändert. Auch für diesn Datentyp wurde zunächst ein entsprechendes Typemap erstellt, das teilweise funktionierte. Jedoch wurde bei der Verwendung eines std::array<> als Parameter einer Funktion übergeben dann ein Ecxeption geworfen, da für std::array  NULL bzw. 0 zurückgegeben werden kann, was bei einer Standard-Exceptio in Swig der Fall ist. So wurde wieder der Datentyp geändert, diesmal wurde ein extra Struct definiert, das die Eigenschaften eines \enquote{Plain old Datatype} aufweist, so dass anstatt eines Objektes auch NULL zurück gegeben werden kann. Über die Swig-User-Mailingliste kam letztendlich der Hinwei,d as im Typemap festzulegen ist, das für der Parameter \enquote{out} außerdem festlegen kann, was als \enquote{null} zurückgeben wird, hier ein leeres Objekt des Strucs. Dies Lösung hätte auch für das std::array funktioniert, so das nicht erst ein extra neuer Datentyp eingeführte werden müsste. Es wurde aber beim Struct geblieben, da im Hinblick auf das Ziel ein Uniplug zu erstellen, man so bei der Erstellung des Headefiles, von den unterschiedlichen Modellierungsprogrammen erst die verschiedenen Datentypen die Vektoren oder Matrizen darstellen in einen einheitlich \CC~Typ umwandeln kann, so das hier das Typemap für jedes Modellierungsprogramm das selbe wäre. 
+%Datentypen die im aktuellen \emph{CppApi.i} Interface mit Typemaps nach \CS~und dem entsprechenden Typ in Fusee gemapt werden sind:\\
+%\begin{itemize}
+	%\item FVector2 nach Fusee.Math.float2
+	%\item FVector3 nach Fusee.Math.float3
+	%\item FVector4 nach Fusee.Math.float4
+	%\item VFLOAT16 nach Fusee.Math.float4x4
+%\end{itemize}
+%
+		%- std::vector, std::map\\
 	
 
 Zeigertypen können in C\# nur im unsafe-Kontext verwendet werden. Zudem unterliegen sie weiteren Einschränkungen (Boxing und Unboxing wird nicht unterstützt und sie erben nicht von object). Diese und weitere Gründe bewegen dazu, mit SWIG aus den c++-Pointern andere, entsprechende Typen in C\# zu generieren. Dazu müssen die Objekte, die hinter den betreffenden Klassen stehen, analysiert werden. Was repräsentiert der Objekttyp in Blender? Wie ist dieses Konzept in Fusee umgesetzt? \textcolor{red}{Evtl hier noch ein Beispiel mit Fusee Float3 oder so. Danach typemaps dazu}
 
 --> nicht nullbar, wird aber wie Pointer behandelt. Exception-Fehler usw.
 
-\subsubsection{Das SWIG Interface File}\label{subsubsec:Swiginterface}
-Das SWIG Interace File CppApi.i enthält neben den oben genannte Typmaps noch weitere .
-string
-map(mit problemen)\&vector
-ignore-Regex
+
 
 
 \subsubsection{GC}\label{subsubsec:GC}

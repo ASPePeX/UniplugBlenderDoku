@@ -74,7 +74,7 @@ Swig mappt Arrays von \CC nach \CS standardmäßig als Pointer, so das auf der \
 
 \subparagraph{std::map}
 
-Im Header File treten viele Key-Value Paare Typ \emph{std::map<string, int>}, \emph{std::map<int, string>} oder \emph{std::map<string, DATA\_TYPE\footnote{Beliebiger Datentyp}>} auf. Um dieses Konstrukt in ein Äquivalents in \CS zu konvertieren, wird das \emph{std\_map.i} Interface in das Interface eingebunden werden. Das ermöglicht es diese Key-Value Paare in einen Datentyp zu übersetzen, der die selben Eingenschaften wie ein \CS~ Dictionary. Der Name des Datetypen wir im im Interface definiert und ist dann in \CS unter diesem Damen zu finden. Der so definierte Datentyp funktioniert im Großen und Ganzen wie ein Dictionary (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stringintmap}). Um ein Key-Value Paar, das einen beliebigen Datentyp enthält nach \CS mappen zu können, muss für jeden Datentyp ein extra Template erstellt werden. Um hier zumindest ein wenig Copy-Paste-Arbeit zu sparen wurde per \emph{\%define} ein Template defniert (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdmapdefine}), das einen Datentyp entgegennimmt, der dann mit einem String zu einem Key-Value paar zusammen gefügt wird. Dieses Template muss dann für jeden Datentyp einmal aufgerufen werden (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdtemplate}). 
+Im Header File treten viele Key-Value Paare Typ \emph{std::map<string, int>}, \emph{std::map<int, string>} oder \emph{std::map<string, DATA\_TYPE\footnote{Beliebiger Datentyp}>} auf. Um dieses Konstrukt in ein Äquivalents in \CS zu konvertieren, wird das \emph{std\_map.i} Interface in das Interface eingebunden werden. Das ermöglicht es diese Key-Value Paare in einen Datentyp zu übersetzen, der die selben Eingenschaften wie ein \CS~ Dictionary. Der Name des Datetypen wir im im Interface definiert und ist dann in \CS unter diesem Damen zu finden. Der so definierte Datentyp funktioniert im Großen und Ganzen wie ein Dictionary (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stringintmap}). Um ein Key-Value Paar, das einen beliebigen Datentyp enthält nach \CS mappen zu können, muss für jeden Datentyp ein extra Template erstellt werden. Um hier zumindest ein wenig Copy-Paste-Arbeit zu sparen wurde per \emph{\%define} ein Template defniert (siehe Listing\ref{lst:stdmap} Zeile\ref{line:stdmapdefine}), das einen Datentyp entgegennimmt, der dann mit einem String zu einem Key-Value paar zusammen gefügt wird. Dieses Template muss dann für jeden Datentyp einmal aufgerufen werden (siehe Listing \ref{lst:stdmap} Zeile\ref{line:stdtemplate}). 
 
 \begin{code}[caption={std::map},label={lst:stdmap}, escapechar=|]
 %include "std_map.i"
@@ -94,7 +94,7 @@ Im Header File treten viele Key-Value Paare Typ \emph{std::map<string, int>}, \e
 
 Im Header-File treten drei Fälle des \emph{std::vector<T>} auf. Diese können mit wenig Aufwand unter Verwendung des \emph{std\_vector.i} Interfaces einfach gemappt werden (siehe Listing \ref{lst:stdvector})
 
-\begin{code}[caption={std::map},label={lst:stdvector}, escapechar=|]
+\begin{code}[caption={std::vector},label={lst:stdvector}, escapechar=|]
 %include "std_vector.i"
 
 %template(IntVector) std::vector<int>;
@@ -103,8 +103,15 @@ Im Header-File treten drei Fälle des \emph{std::vector<T>} auf. Diese können m
 \end{code}
 
 \subparagraph{ignore-Regex}
+Einige Funktionen des Header Files müssen ignoriert werden. Dafür stellt Swig die sog. \emph{\%ignore} Anweisung zu zur Verfügung, mit der man jede beliebige Funktion oder ganze Klassen ignorieren, kann, das heißt sie werden nicht in den Wrapper übernommen. Der Syntax lautet: Zuerst die Ignore-Anweisung und dann der Name der zu ignorierenden Funktion. Beispielweise \emph{\%ignore examplefunction;}. Die Funktionen \emph{examplefunction} würde im Wrapper dann nicht existieren. Hier ist der Fall jedoch etwas speziell, da nicht eine bestimmte Funktion ignoriert werden soll, sonder alle Funktionen die ein bestimmtes Namensschema aufweisen. Um das zu erzielen wird Pattermaching mit Regulären Ausdrücken angewandt. Für die Regulären Ausdrücke wird das Perl Schema (PCRE) verwendet. Um ein Pattern zu erkennen und zu ignorieren weicht der Syntax aber von dem Obengenannten ab. Hier muss mit der \emph{\%rename}-Anweisung, einem Regulären Ausdruck und dem Zusatz eines \emph{\$ignore}-Value gearbeitet werden, da \emph{ignore} eigentlich nur ein Sonderfall der \emph{\%rename} Anweisung ist.
+Listing \ref{lst:ignore} zeit wie alle Funktionen die entweder \emph{sting\_to} oder \emph{to\_string} enthalten ignoriert werden.
 
-\subparagraph{POD Datentypen}
+\begin{code}[caption={inoreregex},label={lst:ignore}, escapechar=|]
+%rename("%(regex:/(\w*)string_to(\w*)/$ignore/)s") "";
+%rename("%(regex:/(\w*)to_string(\w*)/$ignore/)s") "";
+\end{code}
+
+\subparagraph{PODs}
 
 
 %\subsubsection{Typemaps}\label{subsubsec:Typemaps}

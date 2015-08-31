@@ -88,7 +88,7 @@ In der Header-Datei treten drei Fälle des \emph{std::vector<T>} auf. Diese kön
 
 \subparagraph{ignore-Regex}
 Einige Funktionen der Header-Datei müssen ignoriert werden. Dafür stellt Swig die sog. \emph{\%ignore} Anweisung zu zur Verfügung, mit der man jede beliebige Funktion oder ganze Klassen ignorieren, kann, das heißt, sie werden nicht in den Wrapper übernommen. Der Syntax lautet: Zuerst die Ignore-Anweisung und dann der Name der zu ignorierenden Funktion. Beispielsweise \emph{\%ignore examplefunction;}. Die Funktionen \emph{examplefunction} würde im Wrapper dann nicht existieren. Hier ist der Fall jedoch etwas speziell, da nicht eine bestimmte Funktion ignoriert werden soll, sonder alle Funktionen, die ein bestimmtes Namensschema aufweisen. Um das zu erzielen wird Patternmaching mit Regulären Ausdrücken angewandt. Für die Regulären Ausdrücke wird das Perl Schema (PCRE) verwendet. Um ein Pattern zu erkennen und zu ignorieren weicht der Syntax aber von dem Obengenannten ab. Hier muss mit der \emph{\%rename}-Anweisung, einem Regulären Ausdruck und dem Zusatz eines \emph{\$ignore}-Value gearbeitet werden, da \emph{ignore} eigentlich nur ein Sonderfall der \emph{\%rename} Anweisung ist.
-Listing \ref{lst:ignore} zeit wie alle Funktionen die entweder \emph{sting\_to} oder \emph{to\_string} enthalten ignoriert werden.
+Listing \ref{lst:ignore} zeigt wie alle Funktionen die entweder \emph{sting\_to} oder \emph{to\_string} enthalten ignoriert werden.
 
 \begin{code}[caption={inoreregex},label={lst:ignore}, escapechar=|]
 %rename("%(regex:/(\w*)string_to(\w*)/$ignore/)s") "";

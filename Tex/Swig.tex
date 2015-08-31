@@ -1,7 +1,7 @@
 \mysubsection{Linda Schey, Sarah Häfele}{Swig}\label{sec:SWIG}
 
 Swig ist ein Programmierwerkzeug, das es ermöglicht in C/\CC~geschriebenen Programmcode durch höhere Programmiersprachen anzusprechen. Neben einer Vielzahl von Programmier- und Skriptsprachen unterstützt Swig auch \CS~und eignet sich somit um in \CC~geschrieben Programmcode mit Fusee zu verbinden. Swig wurde gewählt, da es zum einen bereits in dem Cinemea4D-Uniplug von Fusee verwendet wurde und zum anderem einem die Arbeit abnimmt einen kompletten Wrapper von Hand schreiben zu müssen, so dass man sich mittels Swig einen Wrapper generieren lassen kann. Zudem erleichtert es die Wartung von Projekten, da Updates im Code nicht von Hand und mühseliger Suche eingetragen werden müssen, sondern lediglich für die neue Generierung des Wrappers die aktuelle Headerfiles eingebunden werden müssen. Um besondere Datentypen zu übersetzen, die beispielsweise in den Standard APIs von \CC und \CS nicht vorhanden sind oder in einen anderen Datentyp, müssen für diese in einem Swig-Interface File extra Vorschriften definiert werden.
-Um den Wrapper zu generieren, wurde zusätzlich die Python Library eingebunden, da das Headerfile teilweise Python Klassen verwendet. Außerdem wurde die Fusee.Math Library referenziert, da einige Datentypen auf Fusee-Datentypen gemapt werden sollen.
+Um den Wrapper zu generieren, wurde zusätzlich die Python Library eingebunden, da das Header File teilweise Python Klassen verwendet. Außerdem wurde die Fusee.Math Library referenziert, da einige Datentypen auf Fusee-Datentypen gemappt werden sollen.
 
 \subsubsection{Überblick}
 Swig ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was durch die Swig-Dokumentation nicht gleich ersichtlich ist und erst durch Trial-and-Error langsam erarbeitet werden kann (hier spielen zudem noch das Zusammentreffen von Blender und Fusee mit all ihrer Eigenheiten eine wichtige Rolle, wie später noch besser ersichtlich wird). Deshalb zunächst eine Liste mit Dingen, auf die beim Entwickeln mit Swig zu achten ist und auf deren Inhalt zum Teil später noch näher eingegangen wird.
@@ -9,7 +9,7 @@ Swig ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was
 \begin{itemize}
 \item Den Build der Solution sowie deren Unterprojekte auf \textbf{Release} stellen: Da Blender Python \textcolor{red}{als Kommunikationssprache verwendet und Python ...} muss das Projekt als Release gebaut werden, da sonst \textcolor{red}{?????????} Näheres zu den Buildeinstellungen in \textcolor{red}{...}
 \item Die richtige \textbf{Build-Reihenfolge} ist unbedingt zu beachten. Zudem sollten zuvor \emph{geswiggte} Klassen aus dem Ordner gelöscht werden, wenn an ihnen Änderungen vorgenommen wurden, um Fehler durch alte Dateien zu vermeiden. Auf die Reihenfolge soll später näher eingegangen werden (siehe \textcolor{red}{???}).
-\item \textcolor{red}{BigObj: wieso, weshalb, warum}
+%\item \textcolor{red}{BigObj: wieso, weshalb, warum} -> brauchne wir nicht mehr
 \item \textbf{Größe des Headerfiles:} Aus Sichtweise der Swig-Entwickler sind einzelne Headerfiles pro Klassen besser zu swiggen als ein großes mit allen gesammelten Klassen. Das Swiggen dauert mit einem großen File dementsprechend lang zum Bauen und tritt ein Fehler auf, muss der ganze Prozess wiederholt werden. Fehler beim Swiggen werden so erst am Ende erkannt. Zudem vermuten das Swig-Team dieses Projektes, dass weitere Komplikationen durch das zu großes File aufgetreten sind. 
 \item Die \textbf{Unterschiede zwischen \CC und \CS} müssen verstanden und beachtet werden, da SWIG nicht alle Klassen, Methoden, etc. einfach in die andere Sprache übersetzen kann. Hierzu zählen sicherlich 
 	\begin{itemize}
@@ -23,44 +23,27 @@ Swig ist nicht intuitiv verwendbar. Bei der Nutzung ist einiges zu beachten, was
 \item \textbf{Debuggen mit SWIG:} Da es kein Syntax-Highlighting für SWIG in Visual Studio gibt, ist das Finden von Fehlern im Swig-Code nicht leicht. Hierzu hat sich das Anhängen von aussagekräftigen Inline-Kommentaren direkt hinter der zu ersetzenden Swig-Variablen als nützlich erwiesen. Der Kommentar wird so in den erzeugten Code mit eingebaut und es kann explizit danach gesucht werden, um Fehler nachzuverfolgen.
 \end{itemize}
 
-
-
-	
-	
-		
-
-
-	Ignore Genereated\\
-
-
 \subsubsection{Aufbau des Projektes in VS}\label{subsubsec:Aufbau}
 
-Um das von Fabi erzeugte \CC~Headerfile nach \CS~zu wrappen wurde eine Solution aufgesetzt die aus fünf Projekten Besteht und den \CC~Code nach \CS~wrappt. Im folgenden werden diese Projekte in der Reihenfolge wie sieh für eine erfolgreiche Generierung des \CS~Codes gebaut werden müssen erläutert.\\
+Um das \CC~Headerfile nach \CS~zu wrappen wurde eine Solution aufgesetzt die aus fünf Projekten Besteht und den \CC~Code nach \CS~wrappt. Im folgenden werden diese Projekte in der Reihenfolge wie sieh für eine erfolgreiche Generierung des \CS~Codes gebaut werden müssen erläutert.\\
 
 
 \begin{description}
 \item[CppApi]\hfill \\
 Enthält das \CC~Headerfile mit allen Klassen und Funktionen. Generiert \emph{CppApi.dll}
 \item[SWIG]\hfill \\
-Enthält das Swig-Interface \emph{CppApi.i} nach dessen Vorschriften besondere Datentypen geswiggt werden (mehr dazu in \ref{subsubsec:swiginterface}). Generiert anhand des Headerfiles entsprechenden Wrapper in \CS. Diese werden dem \emph{CsWrapper} Projekt hinzugefügt.
+Enthält drei Swig-Interfaces \emph{CppApi.i, POD\_Mapping.i und uniplug\_blender\_api\_swig.i} nach dessen Vorschriften besondere Datentypen geswiggt werden (mehr dazu in \ref{subsubsec:swiginterface}). Anhand des Header Files werden die entsprechenden Wrapper in \CS generiert. Diese werden dem \emph{CsWrapper} Projekt hinzugefügt.
 \item[CppWrapper]\hfill \\
-Enthält das \CC~ File CppApiWrapper.cpp, das ebenfalls durch Swig Generiert wird. Es stellt die Schnittsichtelle zwischen dem \CC~ Code und dem \CS~ Code dar unter Berücksichtigung der durch Swig gemarschallten Typen und deren Umwandlungen. Des weiteren wird die \emph{CppWrapper.dll} generiert. 
+Enthält das \CC~ File CppApiWrapper.cpp, das ebenfalls durch Swig Generiert wird. Es stellt die Schnittsichtelle zwischen dem \CC~ Code und dem \CS~ Code dar unter Berücksichtigung der durch Swig gemarschallten Typen und deren Umwandlungen. Des weiteren wird die \emph{CppWrapper.dll} generiert.
 \item[CsWrapper]\hfill \\
 Generiert CsWrapper.dll die die aus dem SWIG Projekt generierten \CS~Klassen enthält. 
 \item[CsClient]\hfill \\
-Ist lediglich ein Test Projekt mit dem der geswiggte Code in \CS~getestet wird. Im Hinblick auf das Uniplug entspräche dies dem Plugin? -> Ist jetzt Plugin. Die Init-Funktion wird von \CS aus aufgerufen.
-\item[ManagedBridge]\hfill \\ Brücke zwischen dem \CS-Plugin und dem \CC-Plugin für Blender. Es handelt sich dabei um ein Managed-\CC-Projekt, das das \CS{}-Plugin referenziert, dessen Funktionen aufruft und die entsprechenden Funktionsaufrufe exportiert, sodass diese von \CC aus aufgerufen werden können.
+Diese Projekt ist das Plugin, das der Entwickler schreiben kann. Hier wird die Init-Funktion von \CS aus nach Blender aufgerufen.
+\item[ManagedBridge]\hfill \\ Brücke zwischen dem \CS-Plugin und dem \CC-Plugin für Blender. Es handelt sich dabei um ein Managed-\CC-Projekt, das das \CS-Plugin referenziert, dessen Funktionen aufruft und die entsprechenden Funktionsaufrufe exportiert, sodass diese von \CC aus aufgerufen werden können.
 \item[BlenderPlug]\hfill \\ Das Projekt BlenderPlug ist das eigentliche \CC-Modul, das in Blender als Python-Erweiterungs-Modul geladen werden kann und eine Init-Funktion bereitstellt, um über die ManagedBridge hinweg auf die \CS{}-Funktionalität zuzugreifen. Der relative kurze \CC-Quelltext dieses Programms richtet sich nach den Vorgaben von Python\footnote{\url{https://docs.python.org/3/extending/extending.html}} und muss mittels Python-Compiler kompiliert werden. Ein entsprechendes Script und eine entsprechende Konfigurationsdatei (\emph{setup.py}) werden im Post-Build-Prozess aufgerufen. Die daraus entstehende pyd-Datei (letztlich eine \CC-DLL) wird dann zusammen mit allen anderen Projektdateien in den Unterordner \emph{Fusee} im Addon-Ordner im Blender-Hauptverzeichnis und in das Blender-Hauptverzeichnis selbst kopiert. In Blender kann dann in der Python-Konsole über \emph{from fusee import uniplug} und \emph{uniplug.init()} die Init-Funktion ausgeführt werden. Siehe hierzu auch das angehängte Tutorial zur Erstellung eines eigenen Plugins.
 \end{description}
 
-  
-
-\subsubsection{Build-Einstellungen in VS}\label{subsubsec:Build}
-	Bigobject (C++->Command Line "`/bigobj"' )\\
-	Release evtl.
-
-
-\subsubsection{Das Swig-Interface File}\label{subsubsec:swiginterface}
+\subsubsection{Swig-Interface Files}\label{subsubsec:swiginterface}
 Da in diesem Projekt mit Blender bzw. Fusee Spezifischen Datentypen gearbeitet wird, die weder in der Standard \CC noch in der\CS API gibt mussten diese im Swig-Interface behandelt werden. 
 
 \subparagraph{Arrays}
@@ -116,7 +99,7 @@ Das Header File enthält Datentypen die Arrays oder Vektoren oder Matrizen im 3-
 Der erste Versuch einfache Arrays zu verwenden wurde wieder verworfen, da diese nur als Pointer zurückgegeben werden können und dies wie in Kapitel \ref{sec:header} vermieden werden sollte. Darauf hin wurden diese Datentypen im Header File auf den Datentyp \emph{std::array<>} geändert. Leider ab es auch in diesem Fall Probleme den Datentyp zu mappen, das seine Eigenschaffen nciht denen eines POD entspricht und es so Probnleme mit Übergabeparmetern diese Typs gibt, da bei Exeptions dieser Typ nicht auf NULL bzw. 0 gecastet werden kann.
 Deshalb wurden im Header File Datentypen definiert, der für Sämtliche int-, bool- und float-Arrays verwendet werden. Für diese Art von Datentypen wurden Typemaps geschrieben und auf  das entsprechende Äquivalent in Fusee gemappt. Die Typemaps wurden mit der \emph{\#define}-Anweisung definiert, sodass nicht jeder Datentyp  extra Typemaps benötigt, sonder diese ähnlich wie bei den \emph{std::map<>} teilweise automatisch übersetzt werden und ein Teil der Tipparbeit und Zeilen Code gespart werden kann.
 Das \emph{out}-Typemap (siehe \ref{lst:pods})weißt eine Besonderheit auf, die es tetorethisch ermöglich würde auch nicht PODs zu übersezten, da im Falle einer Exception nicht NULL bzw. 0 zurückgegeben wird, sondern ein leeres Objekt des Datentyps \enquote{\emph{null="TYPE\_NAME()"}} (vgl. \ref{lst:pods}, Zeile 1). Diese Lösung wurde jedoch erst sehr spät gefunden, sodass letztendlich bei denn den neu definierten Datentypen nach dem VFLAOT Prinzip behalten wurden, da so auch alle auftretenden Array abgedeckt werden und auf das oben beschrieben Arraymapping verzichtet werden kann. 
-\begin{code}[caption={Stark vereinfachtes Beispiel des Typemaps VFOAT},label={lst:pods}, escapechar=|]
+\begin{code}[caption={Stark vereinfachtes Beispiel eines Typemaps für VFOAT},label={lst:pods}, escapechar=|]
 %define %fusee_pod_typemaps(DATA_TYPE, TYPE_NAME, RESULT)
 	%ignore "operator []";
 	%ignore TYPE_NAME;

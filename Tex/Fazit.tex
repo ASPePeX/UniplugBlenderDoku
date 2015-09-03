@@ -2,20 +2,20 @@
 
 Die Ergebnisse des Forschungsprojektes zeigen, dass es auf dem gezeigten Weg und mit den technischen Gegebenheiten prinzipiell möglich ist, eine Kommunikation zwischen Blender und \CS zu schaffen. Allerdings hat sich die Einschätzung der in den \nameref{sec:Vorueberlegungen} getroffenen Entscheidungen sehr stark verändert.
 
-Der Implementierungs- und Wartungsaufwand für mehrere 3D-Softwareprodukte ist sehr viel höher als erwartet, was in den zuvor dargelegten Problemen mit SWIG (\ref{sec:SWIG}) und allgemein am Umfang der Funktionen der Softwareprodukte begründet liegt.
+Der Implementierungs- und Wartungsaufwand für mehrere 3D-Software\-produkte ist sehr viel höher als erwartet, was in den zuvor dargelegten Problemen mit SWIG (\ref{sec:SWIG}) und allgemein am Umfang der Funktionen der Softwareprodukte begründet liegt.
 
-Die Forschungsgruppe empfiehlt für weitergehende Versuche der Entwicklung eines Uniplugs, die zu übersetzenden Funktionen weitergehend zu evaluierten und nativ für die jeweilige 3D-Software ein Plugin als Zwischenschicht für die Übersetzung zu entwickeln.
+Die Forschungsgruppe empfiehlt für weitergehende Versuche der Entwicklung eines Uniplugs, die zu übersetzenden Funktionen weitergehend zu evaluieren und nativ für die jeweilige 3D-Software ein Plugin als Zwischenschicht für die Übersetzung zu entwickeln.
 
 %Technische Umsetzung wahrscheinlich möglich allerdings sehr hoher Aufwand bei Wartung und Anbindung neuer Software.
 %Logische Umsetzung sehr Komplex, je höher die Betrachtungsweite an Software ist.
 
 %Andere Herrangehensweise wählen ... Zwischenlayer nativ für die Software zugeschnitten, dann Übersetzung nach \CS und Anbindung zu Fusee.
 
-\subsubsection{Aussicht}
+\subsection{Aussicht}
 
 Aktuell werden die in Abschnitt \ref{sec:comments} beschriebenen Kommentare noch nicht nach \CS übernommen. Solange das eigentliche Uniplug, das die Schnittstellen verschiedener APIs vereinheitlichen soll, in Entwicklung ist, sollte daher automatisiert eine Doku erstellt werden, die die Entwicklung eigener Plugins vereinfacht. Ebenso wäre dies für Entwickler hilfreich, die, abseits des Uniplugs, die durch dieses Forschungsprojekt entstandene \CC-API für Blender nutzen möchten.
 
-Bisher muss das \emph{BlenderPlug}-Plugin noch manuell initialisiert werden. Es ist aber möglich, über ein direkt in Python geschriebenes Plugin, das unter dem Namen \emph{\_\_init\_\_.py} ebensfalls in den Unterordner Fusee im Blender-Verzeichnis gelegt wird, das Plugin entweder automatisch auszuführen oder Kontextmenüeintäge anzulegen. Über diese kann die im Plugin implementierte Funktionalität ausgeführt werden. Mehr Informationen hierzu finden sich in der Blender-Doku\footnote{\url{https://www.blender.org/api/blender_python_api_2_75_3/info_tutorial_addon.html}}. Je nach Aufbau könnten so mehrere Plugins im Uniplug gebündelt werden (Exportfunktionalität, Szenenfunktionalität, etc.) oder ein Event-System (Aufruf einer speziellen Funktion beim Start vom Blender, Aufruf einer Funktion beim Beenden von Blender, etc.) aufgebaut werden. Dies sollte in Zukunft ebenso weiter verfolgt werden wie die Entwicklung von Beispielplugins und insbesondere eines zur C4D-Variante des Uniplugs vergleichbaren Exportplugins, das es erlaubt, die Szene als FUSEE-Web-Anwendung zu exportieren und so im Web anzuschauen.
+Bisher muss das \emph{BlenderPlug}-Plugin des Weiteren noch manuell initialisiert werden. Es ist aber möglich, über ein direkt in Python geschriebenes Plugin, das unter dem Namen \emph{\_\_init\_\_.py} ebensfalls in den Unterordner Fusee im Blender-Verzeichnis gelegt wird, das Plugin entweder automatisch auszuführen oder Kontextmenüeintäge anzulegen. Über diese kann die im Plugin implementierte Funktionalität ausgeführt werden. Mehr Informationen hierzu finden sich in der Blender-Doku\footnote{\url{https://www.blender.org/api/blender_python_api_2_75_3/info_tutorial_addon.html}}. Je nach Aufbau könnten so mehrere Plugins im Uniplug gebündelt werden (Exportfunktionalität, Szenenfunktionalität, etc.) oder ein Event-System (Aufruf einer speziellen Funktion beim Start vom Blender, Aufruf einer Funktion beim Beenden von Blender, etc.) aufgebaut werden. Dies sollte in Zukunft ebenso weiter verfolgt werden wie die Entwicklung von Beispielplugins und insbesondere eines zur C4D-Variante des Uniplugs vergleichbaren Exportplugins, das es erlaubt, die Szene als FUSEE-Web-Anwendung zu exportieren und so im Web anzuschauen.
 
 Ein Problem ist auch, dass alle DLL-Dateien (\emph{CsWrapper.dll, CsClient.dll}, etc.), die für die korrekte Ausführung der in \CS implementierten Plugin-Funktionalität benötigt werden, im Hauptverzeichnis von Blender liegen müssen, da sie sonst nicht gefunden werden. Hier müsste der Assembly-Suchpfad durch entsprechende Programmierung oder Konfiguration angepasst werden. Dadurch wäre es ausreichend, dass alle Dateien im Unterordner Fusee im Addon-Unterordner des Hauptverzeichnisses liegen.
 

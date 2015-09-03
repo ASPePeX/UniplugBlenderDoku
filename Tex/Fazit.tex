@@ -11,9 +11,9 @@ Die Forschungsgruppe empfiehlt für weitergehende Versuche der Entwicklung eines
 
 %Andere Herrangehensweise wählen ... Zwischenlayer nativ für die Software zugeschnitten, dann Übersetzung nach \CS und Anbindung zu Fusee.
 
-\subsection{Aussicht}
+\mysubsection{Fabian Gärtner}{Aussicht}
 
-Aktuell werden die in Abschnitt \ref{sec:comments} beschriebenen Kommentare noch nicht nach \CS übernommen. Solange das eigentliche Uniplug, das die Schnittstellen verschiedener APIs vereinheitlichen soll, in Entwicklung ist, sollte daher automatisiert eine Doku erstellt werden, die die Entwicklung eigener Plugins vereinfacht. Ebenso wäre dies für Entwickler hilfreich, die, abseits des Uniplugs, die durch dieses Forschungsprojekt entstandene \CC-API für Blender nutzen möchten.
+Aktuell werden die in Abschnitt \ref{sec:comments} beschriebenen Kommentare noch nicht nach \CS übernommen. Solange das eigentliche Uniplug, das die Schnittstellen verschiedener APIs vereinheitlichen soll, in Entwicklung ist, sollte daher automatisiert eine Doku erstellt werden, die die Entwicklung eigener Plugins vereinfacht. Ebenso wäre dies für Entwickler hilfreich, die, abseits des Uniplugs, die durch dieses Projekt entstandene \CC-API für Blender nutzen möchten.
 
 Bisher muss das \emph{BlenderPlug}-Plugin des Weiteren noch manuell initialisiert werden. Es ist aber möglich, über ein direkt in Python geschriebenes Plugin, das unter dem Namen \emph{\_\_init\_\_.py} ebensfalls in den Unterordner Fusee im Blender-Verzeichnis gelegt wird, das Plugin entweder automatisch auszuführen oder Kontextmenüeintäge anzulegen. Über diese kann die im Plugin implementierte Funktionalität ausgeführt werden. Mehr Informationen hierzu finden sich in der Blender-Doku\footnote{\url{https://www.blender.org/api/blender_python_api_2_75_3/info_tutorial_addon.html}}. Je nach Aufbau könnten so mehrere Plugins im Uniplug gebündelt werden (Exportfunktionalität, Szenenfunktionalität, etc.) oder ein Event-System (Aufruf einer speziellen Funktion beim Start vom Blender, Aufruf einer Funktion beim Beenden von Blender, etc.) aufgebaut werden. Dies sollte in Zukunft ebenso weiter verfolgt werden wie die Entwicklung von Beispielplugins und insbesondere eines zur C4D-Variante des Uniplugs vergleichbaren Exportplugins, das es erlaubt, die Szene als FUSEE-Web-Anwendung zu exportieren und so im Web anzuschauen.
 
